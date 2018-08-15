@@ -1,8 +1,11 @@
-## install: `$ pip install pipenv`
+## install:
+  ```
+  $ pip install pipenv
+  ```
 
 ## usage:
 * step1 新建项目`djangoapp` : `$ mkdir djangoapp　& cd djangoapp`
-* step2 初始化Python版本 : `$ pipenv --python 2.7`
+* step2 初始化Python版本 : `$ pipenv --python 2.7` or `$ Python_space\tomoncle\djangoapp>pipenv --python 3.6`
 * step3 进入虚拟环境 : $ `pipenv shell`, 检测环境
   ```
     (djangoapp-UYxpfvzv)liyuanjun@aric-ThinkPad-E450:~/.r/djangoapp$ python -V
