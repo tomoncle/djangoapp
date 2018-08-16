@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = "*"
 django = "==1.11.12"
+requests = "*"
 
 [dev-packages]
 
