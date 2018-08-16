@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>mail</title>
+
+</head>
+<style>
+.iaasos-mail {
+	padding:10px;
+	overflow:hidden;
+	width:100%;
+	}
+.iaasos-mail ul {
+	margin:0;
+    width: 100%;
+    padding: 0;
+	float:left;
+	overflow:hidden;
+	}
+.iaasos-mail ul li {
+	list-style-type:none;
+	width:100%;
+	float:left;
+	padding:1%;
+	font-family:"微软雅黑";
+	font-size:14px;
+	}
+.iaasos-mail ul li.line {
+	border-bottom:1px solid #ddd;
+	padding:0;
+	width:100%;
+	margin-bottom:15px;
+	float:left;
+	}
+
+.iaasos-mail ul li p {
+	margin:0;
+	float:left;
+	display:block;
+	padding:5px;
+	margin-left:10px;
+	}
+
+.div-line {
+	border-bottom:1px solid #ddd;
+	padding:0;
+	width:100%;
+	margin-bottom:15px;
+	float:left;
+	margin-top:15px;
+	}
+
+.iaasos-mail ul li.font18 {
+	font-size:18px;
+	color:#f0543c;
+	text-align:left;
+	width:100%;
+	float:none;
+	overflow:hidden;
+	}
+
+.iaasos-mail ul li img {
+	min-height:28px;
+	float:left;
+	}
+
+.iaasos-mail ul li.font18 span {
+	font-weight:bold;
+	}
+.iaasos-mail p.mail-p {
+	float:left;
+	width:100%;
+	text-align:right;
+	margin:0;
+	font-size:14px;
+	margin-bottom:5px
+	}
+.iaasos-mail p.font18 {
+	font-size:18px;
+	font-weight:bold;
+	}
+
+.iaasos-mail p.p-right {
+    text-align: right;
+}
+
+
+</style>
+</head>
+<body>
+<div class="iaasos-mail">
+	<ul>
+    	<li class="font18"><p>邮件信息：<span>{{ data.a }}</span></p></li>
+        <li class="line"></li>
+        <li><p>你好：<span>{{ data.b }}</span></p></li>
+    </ul>
+    <div class="line"></div>
+    <p class="font18">--{{ BRAND }}</p>
+    <p class="p-right">（此邮件由系统自动发出，请勿回复）</p>
+</div>
+
+</body>
+</html>

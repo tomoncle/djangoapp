@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}auto tags{% endblock %}
+
+{% block page_content %}
+
+
+    <div style="background-color: azure;width: 200px;height: 200px">
+        <h2>web test</h2>
+        hello world!{{ data }}
+    </div>
+
+    <div style="background-color: azure;width: 200px;height: 200px">
+        <h2>upload</h2>
+        <form action="/web/upload/" method="post" enctype="multipart/form-data">
+            <input type="file" name="files" id="local_file_id" multiple="multiple">
+            <button type="submit">上传</button>
+        </form>
+
+    </div>
+
+    <script src="/static/js/lib/jquery.min.js"></script>
+    <script src="/static/js/app/web_socket.js"></script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Students{% endblock %}
+
+{% block page_content %}
+    <div>
+        <table class="table table-hover table-striped table-bordered" style="table-layout: fixed;">
+            <caption><h3 style="font-weight: 200;color:dodgerblue">Students</h3></caption>
+            <thead>
+            <tr class="table-one">
+                <th width="6%">编号</th>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>AGE</th>
+                <th>TIME</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if not students %}
+                <td style="width: 100%;" colspan="6"><span style="font-size: 20px;color:silver">没有可用数据...</span></td>
+            {% endif %}
+            {% for student in students %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ student.student_id }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.age }}</td>
+                    <td>{{ student.create_time }}</td>
+                    　　
+                    <td style="width:10%">
+                        <a href="javascript:;{alert('稍后尝试!')}">编辑</a>｜
+                        <a href="javascript:;" onclick="studentDelete('/web/students_delete/{{ student.student_id }}/')">删除</a>
+                        <form action="/web/upload/" method="post" enctype="multipart/form-data">
+                            <input type="file" name="files" multiple="multiple">
+                            <button type="submit">上传</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function studentDelete(url) {
+            $.ajax({
+                url: url,
+                type: 'delete',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 200) {
+                        window.location.reload();
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            })
+
+        }
+
+    </script>
+
+{% endblock %}

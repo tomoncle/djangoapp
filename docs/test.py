@@ -7,9 +7,14 @@
 # @Docs           : 
 # @Source         : 
 
-l1 = [1, 2, 3]
-l2 = [2, 3, 4]
+# 以二进制模式打开文件
+write_file = open('a.f', 'wb')
 
-l1.extend(l2)
+# 以二进制模式读取文件　
+with open('/tmp/dl.f', 'rb') as f:
+    for line in f:
+        # line 为bytes数组
+        write_file.write(line)
 
-print l1
+write_file.close()
+# diff a.f /tmp/dl.f 相同

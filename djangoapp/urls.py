@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """djangoapp URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -16,6 +18,14 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from .filestream import files_urls
+
+# default url
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+]
+
+# application urls
+urlpatterns += [
+    url(r'^files/', files_urls)
 ]
