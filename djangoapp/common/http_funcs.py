@@ -68,7 +68,7 @@ def make_response(_object):
         def wrapper(*args, **kwargs):
             request = args[0]
             call_func = getattr(_object(), '%s' % request.method.lower())
-            return JsonResponse(call_func(*args))
+            return JsonResponse(call_func(*args,**kwargs))
 
         return wrapper
 

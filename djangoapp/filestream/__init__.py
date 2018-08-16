@@ -62,7 +62,7 @@ def upload(request):
     pass
 
 
-def _files_urls():
+def _urls():
     """
     files handler urlpatterns
     :return:
@@ -78,4 +78,4 @@ def _files_urls():
 
 
 # urlpatterns
-files_urls = _files_urls()
+urls = _urls()

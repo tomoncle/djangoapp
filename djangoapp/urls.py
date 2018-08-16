@@ -18,7 +18,8 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from .filestream import files_urls
+from .filestream import urls as files_urls
+from .student.views import urls as student_urls
 
 # default url
 urlpatterns = [
@@ -27,5 +28,6 @@ urlpatterns = [
 
 # application urls
 urlpatterns += [
-    url(r'^files/', files_urls)
+    url(r'^files/', files_urls),
+    url(r'^student/', student_urls)
 ]
