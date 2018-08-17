@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @Author         : Tom.Lee
+import requests
 from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
 from django.http import StreamingHttpResponse
@@ -58,6 +59,42 @@ def download_large(request):
         return HttpResponse('下载失败！ "{}"'.format(e))
 
 
+def download_proxy(request):
+    headers = {
+        'Cookie': '',
+        'accept-encoding': 'gzip, deflate, br',
+        'accept': 'text/html,application/xhtml+xml,application/xml;'
+                  'q=0.9,image/webp,image/apng,*/*;q=0.8',
+        'cache-control': 'max-age=0',
+        'Connection': 'keep-alive',
+        'upgrade-insecure-requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 5.0; '
+                      'SM-G900P Build/LRX21T) '
+                      'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 '
+                      'Mobile Safari/537.36',
+    }
+    url = request.GET.get('url')
+    if not url:
+        return HttpResponseBadRequest(HttpResponse("400 Bad Request."))
+
+    file_name = url.split("/")[-1:][0].split("?")[0]
+    try:
+        res = requests.get(url, headers=headers, stream=True, verify=False)
+
+        def g():
+            for chunk in res.iter_content(chunk_size=1024):
+                if chunk:
+                    yield chunk
+
+        response = StreamingHttpResponse(g())  # data必须是可迭代对象
+        response['Content-Type'] = 'application/binary; charset=utf-8'
+        response['Content-Disposition'] = ('attachment; filename=%s' % file_name)
+        response['Content-Length'] = float(res.headers.get('Content-Length', default=0))
+        return response
+    except Exception as e:
+        return HttpResponse('下载失败！ "{}"'.format(e))
+
+
 def upload(request):
     pass
 
@@ -71,6 +108,7 @@ def _urls():
     urlpatterns = [
         url(r'^download/$', download),
         url(r'^dl_large/$', download_large),
+        url(r'^dl_proxy/$', download_proxy),
         url(r'^upload/$', upload),
     ]
 

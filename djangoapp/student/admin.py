@@ -10,9 +10,8 @@ from .models import Student
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'age', 'create_time')  # 显示属性并排序
+    list_display = ('student_id', 'name', 'age', 'create_time')  # 显示属性并排序
     list_filter = ('create_time',)  # 查询条件
-
 
 # Register your models here.
 # admin.site.register(Clazz, ClazzAdmin)

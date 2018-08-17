@@ -18,6 +18,8 @@
 #
 # write_file.close()
 # # diff a.f /tmp/dl.f 相同
-import re
 
-print(re.match(r'\d*', '--'))
+import requests
+
+s = requests.patch('http://127.0.0.1:8000/student/',data={'student_id':1,'name':'tomoncle'})
+print(s.text)

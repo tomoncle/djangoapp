@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.conf.urls import url
+from django.views.decorators.csrf import csrf_exempt
 
+from .models import Student
 from ..common import build_request_params
 from ..common import check_request_method
+from ..common import dict_filters
+from ..common import ignore_self_waning
 from ..common import make_response
 
 
@@ -13,72 +17,72 @@ class RestResponse(object):
     views.func 函数中传入多少参数，method要传入对应数量的参数
     """
 
+    @csrf_exempt
     def post(self, _request, *args):
-        """
-        http://localhost:8000/rest/request/
-        :param _request:
-        :param args:
-        :return:
-        """
-        params = _request.POST
-        return {'code': 200, 'params': params, 'method': 'post'}
+        params = dict_filters(_request.POST, ['name', 'age', 'clazz'])
+        # clazz filed is ForeignKey object , clazz_id meaning the primary key of Clazz object.
+        # "{filed}_id" meaning ForeignKey Object primary key.
+        if params.get('clazz'):
+            params['clazz_id'] = params.pop('clazz')
+        obj = Student(**params)
+        obj.save()
+        return {'code': 200, 'data': obj.to_dict(), 'method': 'post'}
 
+    @ignore_self_waning
     def get(self, _request, get_id=None):
         """
-        http://localhost:8000/rest/request/1?username=tom
-        http://localhost:8000/rest/request?username=tom
-        :param _request:
-        :param get_id:
+        http://localhost:8000/student/1?username=tom
+        http://localhost:8000/student/?username=tom
         :return:
         """
-        params = _request.GET
+        get_id = get_id or _request.GET.get('student_id')
         if get_id:
-            return {'code': 200, 'params': params, 'method': 'get', 'path': get_id}
-        return {'code': 200, 'params': params, 'method': 'get'}
+            data = Student.objects.filter(student_id=get_id)
+            return data[0].to_dict() if data else None
+        return [s.to_dict() for s in Student.objects.all()]
 
+    @ignore_self_waning
     def put(self, _request, *args):
-        """
-        http://localhost:8000/rest/request/
-        :param _request:
-        :param args:
-        :return:
-        """
         params = _request.PUT
-        return {'code': 200, 'params': params, 'method': 'put'}
+        student_id = params.get('student_id')
+        name = params.get('name')
+        obj, created = Student.objects.update_or_create(
+            student_id=student_id,
+            defaults={'name': name},
+        )
+        return obj.to_dict()
 
+    @ignore_self_waning
     def delete(self, _request, del_id):
-        """
-        http://localhost:8000/rest/request/1
-        :param _request:
-        :param del_id:
-        :return:
-        """
-        return {'code': 200, 'params': del_id, 'method': 'delete'}
+        del_id = del_id or _request.DELETE.get('student_id')
+        Student.objects.filter(student_id=del_id).delete()
+        return del_id
 
+    @ignore_self_waning
     def head(self, _request, *args):
         """
-        http://localhost:8000/rest/request/
-        :param _request:
-        :param args:
-        :return:
+        check request resources.
+        :return None
         """
-        return {'code': 200, 'data': 'hello world', 'method': 'head'}
+        assert _request
 
+    @ignore_self_waning
     def patch(self, _request, *args):
-        """
-        http://localhost:8000/rest/request/
-        :param _request:
-        :param args:
-        :return:
-        """
-        return {'code': 200, 'data': 'hello world', 'method': 'patch'}
+        params = _request.PATCH
+        student_id = params.get('student_id')
+        name = params.get('name')
+        obj, created = Student.objects.update_or_create(
+            student_id=student_id,
+            defaults={'name': name},
+        )
+        return obj.to_dict()
 
 
 @check_request_method(["GET", "POST", "PUT", "DELETE", "HEAD", "PATCH"])
-@build_request_params()
+@build_request_params
 @make_response(RestResponse)
-def student(_request, *args, **kwargs):
+def student_handler(_request, *args, **kwargs):
     pass
 
 
-urls = [url(r'([0-9a-zA-Z]*)$', student)], 'student', 'student'
+urls = [url(r'([0-9a-zA-Z]*)$', student_handler)], 'student', 'student'
