@@ -109,17 +109,6 @@ def upload(request):
       <input type=submit value=Upload>
     </form>
         """)
-    # form = UploadObjectForm(request.POST, request.FILES)
-    # if not form.is_valid():
-    #     return HttpResponse('上传失败！ 文件不能为空')
-    # data = form.clean()
-    # object_file = data['file']
-    # print('file_name: %s' % object_file.name)
-    # print('file_size: %s' % object_file.size)
-    # import os
-    #
-    # os.rename(object_file.file.name, '/tmp/{name}'.format(name=object_file.name))
-    # return HttpResponse('file:"%s"上传成功！' % object_file.name)
     return save_file(request)
 
 
