@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 # @Author         : Tom.Lee
 
-
 import errno
 import os
+import shutil
 from functools import reduce
 
 import six
@@ -19,11 +19,45 @@ __all__ = ['IterableWithLength',
 class IterableWithLength(object):
     """
     返回可迭代对象及对象大小
+       f = IterableWithLength(
+            iterable=open('c:/docs.grafana.org.rar','wb'),
+            length=get_file_size(open('c:/docs.grafana.org.rar')))
+       print(f.length)
     """
 
     def __init__(self, iterable, length):
         self.iterable = iterable
         self.length = length
+
+    def __iter__(self):
+        try:
+            for chunk in self.iterable:
+                yield chunk
+        finally:
+            self.iterable.close()
+
+    def next(self):
+        return next(self.iterable)
+
+    def __len__(self):
+        return self.length
+
+
+class IterableWithLengthOfFile(object):
+    """
+    返回文件为可迭代对象及文件大小
+        f = IterableWithLengthOfFile('C:/flask.md')
+        print(f.iterable)  # <_io.BufferedReader name='C:/flask.md'>
+        print(f.length)  # 149
+        with open('C:/flask2.md', 'wb') as b:  # 写入的新文件flask2.md与源文件内容一致
+            for line in f:
+                print(line)
+                b.write(line)
+    """
+
+    def __init__(self, file_path):
+        self.iterable = open(file_path, 'rb')
+        self.length = get_file_size(open(file_path))
 
     def __iter__(self):
         try:
@@ -106,3 +140,23 @@ def get_file_size(file_obj):
                 return
             else:
                 raise
+
+
+def copy_file(src, dst):
+    """
+    文件复制
+    :param src: 源文件
+    :param dst: 目标文件
+    :return:
+    """
+    shutil.copy2(src, dst)
+
+
+def rename_file(src, dst):
+    """
+    文件重命名
+    :param src: 原名称
+    :param dst: 新名称
+    :return:
+    """
+    os.rename(src, dst)

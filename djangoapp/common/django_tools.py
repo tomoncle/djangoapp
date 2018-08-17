@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @Author         : Tom.Lee
-import os
-import time
-import shutil
 import platform
+import time
+
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.forms import forms
 
+from .file_tools import copy_file
+from .file_tools import rename_file
 from .http_funcs import json_response
 from ..settings import UPLOAD_DIR
 
@@ -51,12 +52,13 @@ def save_file(request):
             for chunk in object_file.chunks():
                 desc.write(chunk)
     else:
-        # 假如是大文件，window环境使用copyfile
+        # 假如是大文件，系统默认直接rename, 即更新linux文件的inode
+        _func = rename_file
+        # window环境使用copyfile, rename 会有权限问题
         if platform.system() == 'Windows':
-            shutil.copy2(object_file.file.name, save_path)
-        else:
-            # 假如是大文件，直接rename, 即更新linux文件的inode
-            os.rename(object_file.file.name, save_path)
+            _func = copy_file
+        _func(object_file.file.name, save_path)
+
     return {
         'status': True,
         'timestamp': int(round(time.time() * 1000)),
@@ -68,3 +70,36 @@ def save_file(request):
         'method': request.method,
         'message': '文件 [%s] 上传成功！' % object_file.name
     }
+
+
+def paths(request):
+    """
+    获取 项目所有的URL信息
+    :param request:
+    :return:
+    """
+    from ..urls import urlpatterns
+    from django.urls.resolvers import RegexURLPattern
+    from django.http import JsonResponse
+
+    def search_url(_urlpatterns, content_path, result=None):
+        """
+        获取URL
+        :param _urlpatterns: 所有的 RegexURLResolver
+        :param content_path: 根路径
+        :param result: 当前的 RegexURLPattern 集合
+        :return:
+        """
+        result = result or []
+        for item in _urlpatterns:
+            # 去掉url中的^和$
+            url_path = item._regex.strip('^$')
+            # 如果是RegexURLPattern直接追加
+            if isinstance(item, RegexURLPattern):
+                result.append(content_path + url_path)
+            else:
+                # 否则深度递归
+                result.extend(search_url(item.urlconf_name, content_path + url_path))
+        return result
+
+    return JsonResponse({'paths': search_url(urlpatterns, '/')})

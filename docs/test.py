@@ -26,5 +26,5 @@
 
 import os
 
-
+print('^123^$'.strip('^$'))
 
