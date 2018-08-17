@@ -9,7 +9,7 @@ from django.http import StreamingHttpResponse
 from ..common import get_file_size
 from ..common import open_file_to_iterable
 from ..common import save_file
-
+from ..settings import UPLOAD_DIR
 
 def download(request):
     """

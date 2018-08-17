@@ -24,6 +24,7 @@
 # s = requests.patch('http://127.0.0.1:8000/student/', data={'student_id': 1, 'name': 'tomoncle'})
 # print(s.text)
 
-with open('/tmp/s.txt', 'wb') as f:
-    f.write(b'abc')
+import os
+
+
 

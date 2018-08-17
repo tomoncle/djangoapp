@@ -14,6 +14,16 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+import platform
+
+# djangoapp config
+if platform.system() == 'Windows':
+    UPLOAD_DIR = 'C:/djangoapp'
+else:
+    UPLOAD_DIR = '/tmp/djangoapp'
+if not os.path.exists(UPLOAD_DIR) or not os.path.isdir(UPLOAD_DIR):
+    os.makedirs(UPLOAD_DIR)
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
