@@ -8,6 +8,7 @@ from django.http import StreamingHttpResponse
 
 from ..common import get_file_size
 from ..common import open_file_to_iterable
+from ..common import save_file
 
 
 def download(request):
@@ -98,7 +99,28 @@ def download_proxy(request):
 
 
 def upload(request):
-    pass
+    if request.method == 'GET':
+        return HttpResponse("""
+         <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+        """)
+    # form = UploadObjectForm(request.POST, request.FILES)
+    # if not form.is_valid():
+    #     return HttpResponse('上传失败！ 文件不能为空')
+    # data = form.clean()
+    # object_file = data['file']
+    # print('file_name: %s' % object_file.name)
+    # print('file_size: %s' % object_file.size)
+    # import os
+    #
+    # os.rename(object_file.file.name, '/tmp/{name}'.format(name=object_file.name))
+    # return HttpResponse('file:"%s"上传成功！' % object_file.name)
+    return save_file(request)
 
 
 def _urls():

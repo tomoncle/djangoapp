@@ -9,7 +9,11 @@ from functools import reduce
 
 import six
 
-__all__ = ['IterableWithLength', 'open_file_to_iterable', 'get_file_bytes', 'file_iterator', 'get_file_size']
+__all__ = ['IterableWithLength',
+           'open_file_to_iterable',
+           'get_file_bytes',
+           'file_iterator',
+           'get_file_size']
 
 
 class IterableWithLength(object):
@@ -41,7 +45,7 @@ def open_file_to_iterable(file_path):
     :param file_path:
     :return: 可迭代对象
     """
-    with open(file_path, 'rb') as f:
+    with open(file_path, 'rb') as f:  # mode=rb 表示以二进制模式打开,避免乱码
         for line in f:
             yield line
 
@@ -67,7 +71,7 @@ def file_iterator(file_name, chunk_size=512):
     :param chunk_size:
     :return: 可迭代对象
     """
-    with open(file_name) as f:
+    with open(file_name, 'rb') as f:  # mode=rb 表示以二进制模式打开,避免乱码
         while True:
             c = f.read(chunk_size)
             if c:
