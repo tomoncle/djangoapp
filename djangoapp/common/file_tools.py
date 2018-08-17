@@ -41,7 +41,7 @@ def open_file_to_iterable(file_path):
     :param file_path:
     :return: 可迭代对象
     """
-    with open(file_path) as f:
+    with open(file_path, 'rb') as f:
         for line in f:
             yield line
 
@@ -49,6 +49,7 @@ def open_file_to_iterable(file_path):
 def get_file_bytes(file_path):
     """
     获取对象长度
+    速度比较慢, 推荐使用 get_file_size()
     :param file_path:
     :return:
     """
@@ -77,6 +78,8 @@ def file_iterator(file_name, chunk_size=512):
 
 def get_file_size(file_obj):
     """获取文件对象的大小
+        get_file_size(open('/home/ubuntu-14.04.3-desktop-amd64.iso'))
+
     :param file_obj: file-like object.
     """
     if (hasattr(file_obj, 'seek') and hasattr(file_obj, 'tell') and

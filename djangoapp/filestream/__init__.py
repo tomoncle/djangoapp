@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
 from django.http import StreamingHttpResponse
 
-from ..common import get_file_bytes
+from ..common import get_file_size
 from ..common import open_file_to_iterable
 
 
@@ -48,12 +48,14 @@ def download_large(request):
     file_path = request.GET.get('file_path')
     if not file_path:
         return HttpResponseBadRequest(HttpResponse("400 Bad Request."))
+
+    file_name = file_path.split("/")[-1:][0].split("?")[0]
     try:
         data = open_file_to_iterable(file_path)
         response = StreamingHttpResponse(data)  # data必须是可迭代对象
         response['Content-Type'] = 'application/binary; charset=utf-8'
-        response['Content-Disposition'] = ('attachment; filename=%s' % file_path)
-        response['Content-Length'] = get_file_bytes(file_path)
+        response['Content-Disposition'] = ('attachment; filename=%s' % file_name)
+        response['Content-Length'] = get_file_size(open(file_path))
         return response
     except Exception as e:
         return HttpResponse('下载失败！ "{}"'.format(e))
