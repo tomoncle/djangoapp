@@ -103,3 +103,17 @@ def paths(request):
         return result
 
     return JsonResponse({'paths': search_url(urlpatterns, '/')})
+
+
+def page_not_found(request):
+    """
+    404 page config
+    :param request:
+    :return:
+    """
+    import json
+    from django.shortcuts import render
+
+    data = paths(request)
+    data = data.content if data else b'{"paths": []}'
+    return render(request, 'error/404.html', json.loads(data))
