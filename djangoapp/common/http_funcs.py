@@ -13,7 +13,12 @@ from django.http import HttpResponseNotAllowed
 from django.http import JsonResponse
 from django.http.request import QueryDict
 
-__all__ = ['check_request_method', 'build_request_params', 'json_response', 'make_response']
+__all__ = [
+    'check_request_method',
+    'build_request_params',
+    'json_response',
+    'make_response'
+]
 
 _HTTP_405 = HttpResponse(405)
 
