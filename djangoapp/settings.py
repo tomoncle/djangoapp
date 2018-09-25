@@ -34,9 +34,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'kj021-0v%2ieu$n9k$%q%fmp1%8kws3nodl=*a&-k*$0q)72*q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 # 系统默认模块
@@ -67,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'djangoapp.common.GlobalRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'djangoapp.urls'
@@ -135,6 +136,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 # 定义系统静态资源
+# You need to enable DEBUG and enable staticfiles app.
+# If you do not want to enable DEBUG,
+# you may run runserver with --insecure commandline parameter.
+
 # Static files (CSS, JavaScript, Images)
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),

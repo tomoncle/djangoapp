@@ -10,9 +10,6 @@
 from django.utils.deprecation import MiddlewareMixin
 
 from .common_funcs import ignore_self_waning
-from .logger import ConsoleLogger
-
-logger = ConsoleLogger()
 
 
 class GlobalRequestMiddleware(MiddlewareMixin):
