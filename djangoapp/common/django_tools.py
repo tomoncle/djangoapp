@@ -79,41 +79,30 @@ def paths(request):
     :return:
     """
     from ..urls import urlpatterns
-    from django.urls.resolvers import RegexURLPattern
+    #  django 1.x
+    # from django.urls.resolvers import RegexURLPattern
+    # django 2.x +
+    from django.urls import URLPattern, URLResolver
     from django.http import JsonResponse
 
-    def search_url(_urlpatterns, content_path, result=None):
-        """
-        获取URL
-        :param _urlpatterns: 所有的 RegexURLResolver
-        :param content_path: 根路径
-        :param result: 当前的 RegexURLPattern 集合
-        :return:
-        """
-        result = result or []
-        for item in _urlpatterns:
-            # 去掉url中的^和$
-            url_path = item._regex.strip('^$')
-            # 如果是RegexURLPattern直接追加
-            if isinstance(item, RegexURLPattern):
-                result.append(content_path + url_path)
-            else:
-                # 否则深度递归
-                result.extend(search_url(item.urlconf_name, content_path + url_path))
-        return result
+    for u in urlpatterns:
+        print()
+        if isinstance(u, URLResolver):
+            print(u, u.pattern, u.url_patterns)
+        if isinstance(u, URLPattern):
+            print(u, u.pattern)
 
-    return JsonResponse({'paths': search_url(urlpatterns, '/')})
+    return JsonResponse({'paths': ""})
 
 
-def page_not_found(request):
+def page_not_found(request, e):
     """
     404 page config
     :param request:
+    :param e : exception
     :return:
     """
-    import json
     from django.shortcuts import render
-
-    data = paths(request)
-    data = data.content if data else b'{"paths": []}'
-    return render(request, 'error/404.html', json.loads(data))
+    if e:
+        print("404 异常：", e)
+    return render(request, 'error/404.html')

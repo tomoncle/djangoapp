@@ -15,25 +15,29 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
 from django.contrib import admin
+from django.urls import re_path as url
 
 from .common import page_not_found
 from .common import paths
-from .filestream import urls as files_urls
-from .student.views import urls as student_urls
+from .filestream.urls import file_patterns
+from .sample.urls import sample_patterns
+from .student.urls import student_patterns
 
 # default url
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ]
 
-# application urls
+# function urls
 urlpatterns += [
     url(r'^paths/$', paths),
-    url(r'^files/', files_urls),
-    url(r'^student/', student_urls),
 ]
+
+# application urls
+urlpatterns += file_patterns
+urlpatterns += student_patterns
+urlpatterns += sample_patterns
 
 # handler config
 handler404 = page_not_found

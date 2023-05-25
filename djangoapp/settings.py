@@ -18,7 +18,7 @@ import platform
 
 # djangoapp config
 if platform.system() == 'Windows':
-    UPLOAD_DIR = 'C:/djangoapp'
+    UPLOAD_DIR = 'D:/tmp/djangoapp'
 else:
     UPLOAD_DIR = '/tmp/djangoapp'
 if not os.path.exists(UPLOAD_DIR) or not os.path.isdir(UPLOAD_DIR):
@@ -35,6 +35,7 @@ SECRET_KEY = 'kj021-0v%2ieu$n9k$%q%fmp1%8kws3nodl=*a&-k*$0q)72*q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+APPEND_SLASH = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 

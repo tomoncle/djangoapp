@@ -29,8 +29,6 @@ def download(request):
     # 小文件不要写"response['Content-Length']",否则会丢失数据或不能下载
     with open(file_path) as f:
         for line in f:
-            # 写入内容
-            print(line)
             response.write(line)
     return response
 
@@ -52,6 +50,7 @@ def download_large(request):
 
     file_name = file_path.split("/")[-1:][0].split("?")[0]
     try:
+        # data必须是可迭代对象
         data = open_file_to_iterable(file_path)
         response = StreamingHttpResponse(data)  # data必须是可迭代对象
         response['Content-Type'] = 'application/binary; charset=utf-8'
@@ -112,21 +111,21 @@ def upload(request):
     return save_file(request)
 
 
-def _urls():
-    """
-    files handler urlpatterns
-    :return:
-    """
-    from django.conf.urls import url
-    urlpatterns = [
-        url(r'^download/$', download),
-        url(r'^dl_large/$', download_large),
-        url(r'^dl_proxy/$', download_proxy),
-        url(r'^upload/$', upload),
-    ]
-
-    return urlpatterns, 'file_stream', 'file_stream'
-
-
-# urlpatterns
-urls = _urls()
+# def _urls():
+#     """
+#     files handler urlpatterns
+#     :return:
+#     """
+#     from django.urls import re_path as url
+#     urlpatterns = [
+#         url(r'^download/$', download),
+#         url(r'^dl_large/$', download_large),
+#         url(r'^dl_proxy/$', download_proxy),
+#         url(r'^upload/$', upload),
+#     ]
+#
+#     return urlpatterns, 'file_stream', 'file_stream'
+#
+#
+# # urlpatterns
+# urls = _urls()

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from django.conf.urls import url
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Student
@@ -83,6 +82,3 @@ class RestResponse(object):
 @make_response(RestResponse)
 def student_handler(_request, *args, **kwargs):
     pass
-
-
-urls = [url(r'([0-9a-zA-Z]*)$', student_handler)], 'student', 'student'
