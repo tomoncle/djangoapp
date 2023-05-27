@@ -22,6 +22,9 @@ $ gunicorn djangoapp.wsgi
 [2023-05-25 08:34:14 +0000] [7556] [INFO] Listening at: http://127.0.0.1:8000 (7556)
 [2023-05-25 08:34:14 +0000] [7556] [INFO] Using worker: sync
 [2023-05-25 08:34:14 +0000] [7557] [INFO] Booting worker with pid: 7557
+
+# 4.使用gevent 进行异步处理
+$ gunicorn -k gevent djangoapp.wsgi
 """
 
 import os
