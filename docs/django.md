@@ -1,6 +1,6 @@
 ## install
 * 进入虚拟环境 : `$ pipenv shell`
-* install django: `$ pipenv install django==1.11.12`
+* install django: `$ pipenv install django==4.2.1`
 * create project: `$ django-admin startproject djangoapp`
 * create model  : `$ python manage.py startapp student(模块名称)`
   ```

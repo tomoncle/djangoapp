@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Author         : Tom.Lee
+# @Time    : 2023/6/6 22:41
+# @Author  : tomoncle
+# @Site    : https://github.com/tomoncle
+# @File    : __init__.py.py
+
 import requests
 from django.http import HttpResponse
 from django.http import HttpResponseBadRequest

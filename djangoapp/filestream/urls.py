@@ -6,20 +6,20 @@
 # @File    : urls.py
 # @Software: PyCharm
 
-from django.urls import re_path as url
+from django.urls import re_path, path
 
 from . import download, download_large, download_proxy, upload
 
 _urlpatterns = [
-    url(r'^download/$', download),
-    url(r'^dl_large/$', download_large),
-    url(r'^dl_proxy/$', download_proxy),
-    url(r'^upload/$', upload),
+    re_path(r'download/', download),
+    re_path(r'download_large/', download_large),
+    re_path(r'download_proxy/', download_proxy),
+    re_path(r'upload/', upload),
 ]
 
 _file_stream_urls = _urlpatterns, 'file_stream', 'file_stream'
 
 # application urls
 file_patterns = [
-    url(r'^files/', _file_stream_urls),
+    path('files/', _file_stream_urls),
 ]

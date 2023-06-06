@@ -1,17 +1,14 @@
 [[source]]
 url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
 verify_ssl = true
-name = "pypi"
+name = "pip_conf_index_global"
 
 [packages]
-django = "4.2.1"
+django = "==4.2.1"
 requests = "*"
-six = "*"
-urllib3 = "==1.26.6"
-gevent = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.9"
-python_full_version = "3.9.12"
+python_full_version = "3.9.16"

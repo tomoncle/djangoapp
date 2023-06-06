@@ -2,30 +2,42 @@
 # -*- coding: utf-8 -*-
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Student
-from ..common import build_request_params
-from ..common import check_request_method
+from .models import Student,Clazz
 from ..common import dict_filters
 from ..common import ignore_self_waning
-from ..common import make_response
 
 
-# Create your views here.
-class RestResponse(object):
+class ClassRestResponse(object):
     """
     views.func 函数中传入多少参数，method要传入对应数量的参数
     """
 
+    @ignore_self_waning
+    def get(self, _request, get_id=None):
+        """
+        http://localhost:8000/class/1?name=manth
+        http://localhost:8000/class/?name=manth
+        :return:
+        """
+        get_id = get_id or _request.GET.get('class_id')
+        if get_id:
+            data = Clazz.objects.filter(clazz_id=get_id)
+            return data[0].to_dict() if data else None
+        return [s.to_dict() for s in Student.objects.all()]
+
     @csrf_exempt
     def post(self, _request, *args):
-        params = dict_filters(_request.POST, ['name', 'age', 'clazz'])
-        # clazz filed is ForeignKey object , clazz_id meaning the primary key of Clazz object.
-        # "{filed}_id" meaning ForeignKey Object primary key.
-        if params.get('clazz'):
-            params['clazz_id'] = params.pop('clazz')
-        obj = Student(**params)
+        params = dict_filters(_request.POST, ['name', 'description'])
+        obj = Clazz(**params)
         obj.save()
         return {'code': 200, 'data': obj.to_dict(), 'method': 'post'}
+
+
+# Create your views here.
+class StudentRestResponse(object):
+    """
+    views.func 函数中传入多少参数，method要传入对应数量的参数
+    """
 
     @ignore_self_waning
     def get(self, _request, get_id=None):
@@ -39,6 +51,17 @@ class RestResponse(object):
             data = Student.objects.filter(student_id=get_id)
             return data[0].to_dict() if data else None
         return [s.to_dict() for s in Student.objects.all()]
+
+    @csrf_exempt
+    def post(self, _request, *args):
+        params = dict_filters(_request.POST, ['name', 'gender', 'age', 'clazz'])
+        # clazz filed is ForeignKey object , clazz_id meaning the primary key of Clazz object.
+        # "{filed}_id" meaning ForeignKey Object primary key.
+        if params.get('clazz'):
+            params['clazz_id'] = params.pop('clazz')
+        obj = Student(**params)
+        obj.save()
+        return {'code': 200, 'data': obj.to_dict(), 'method': 'post'}
 
     @ignore_self_waning
     def put(self, _request, *args):
@@ -77,8 +100,3 @@ class RestResponse(object):
         return obj.to_dict()
 
 
-@check_request_method(["GET", "POST", "PUT", "DELETE", "HEAD", "PATCH"])
-@build_request_params
-@make_response(RestResponse)
-def student_handler(_request, *args, **kwargs):
-    pass
