@@ -100,3 +100,8 @@ class StudentRestResponse(object):
         return obj.to_dict()
 
 
+def student_index(request):
+    from django.shortcuts import render
+    students = Student.objects.all()
+    context = {'students': students}
+    return render(request, 'students/index.html', context)

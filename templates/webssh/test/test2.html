@@ -1,0 +1,50 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+{% block content %}
+
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">批量命令执行CMD工具</h3>
+        </div>
+        <div class="panel-body">
+              <div id="terminal"></div>
+        </div>
+        <div class="panel-footer">
+            <input type="button" value="执行命令" onclick="show()">
+        </div>
+    </div>
+
+    <script type="text/javascript">
+      var window_width = $(window).width()-200;
+      var window_height = $(window).height()-200;
+      var term = new Terminal(
+            {
+                cols: Math.floor(window_width/9),
+                rows: Math.floor(window_height/20),
+                useStyle:false,
+                convertEol: true,
+                cursorBlink:false,
+                rendererType: "canvas",
+            }
+    );
+    term.open(document.getElementById('terminal'));
+      function show(){
+          $.ajax({
+              url:"/webssh/test2/",
+              type:"POST",
+              contentType:"application/json;",
+              data: "ok",
+              success:function (res) {
+                  //term.clear();
+                  term.writeln(res);
+              }
+          });
+      }
+    </script>
+{% endblock %}

@@ -1,0 +1,43 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+</head>
+<body>
+<input type="button" value="执行命令" onclick="show()">
+<div id="terminal"></div>
+<script type="text/javascript">
+    var window_width = $(window).width();
+    var window_height = $(window).height();
+    var term = new Terminal(
+        {
+            cols: Math.floor(window_width / 9),
+            rows: Math.floor(window_height / 20),
+            useStyle: false,
+            convertEol: true,
+            cursorBlink: false,
+            rendererType: "canvas",
+            theme: {
+                foreground: 'yellow',
+                background: 'rgba(6,1,1,0.55)',
+            }
+        }
+    );
+    term.open(document.getElementById('terminal'));
+
+    function show() {
+        $.ajax({
+            url: "/webssh/test1/",
+            type: "POST",
+            contentType: "application/json;",
+            data: "ok",
+            success: function (res) {
+                term.writeln(res);
+            }
+        });
+    }
+</script>
+</body>
+</html>
