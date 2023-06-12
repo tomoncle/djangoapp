@@ -38,3 +38,26 @@ $ export PYTHONPATH=${PYTHONPATH}:/root/.local/share/virtualenvs/djangoapp-yg1Eq
 ```bash
 $ gunicorn djangoapp.wsgi -b 0.0.0.0:8080 -w 4 --log-level debug -D 
 ```
+
+## [使用 Daphne 托管 django](https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/daphne/)
+
+### 1.安装
+```bash
+python -m pip install daphne
+```
+
+### 2.集成 daphne 到 `django manager runserver`, 配置 settings.py
+```python
+# Application definition
+INSTALLED_APPS = [
+    "daphne",
+    ...,
+]
+
+ASGI_APPLICATION = "myproject.asgi.application"
+```
+
+### 3.运行
+```bash
+python manager runserver
+```
