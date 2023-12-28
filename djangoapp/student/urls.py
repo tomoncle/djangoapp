@@ -11,6 +11,7 @@ from django.urls import re_path
 from .views import StudentRestResponse, ClassRestResponse, student_index
 from ..common import build_request_params
 from ..common import check_request_method
+from ..common import make_path_view
 from ..common import make_response
 
 
@@ -31,15 +32,14 @@ def class_handler(_request, *args, **kwargs):
 _student_url = [
     re_path('index', student_index),
     re_path(r'([0-9a-zA-Z]*)', student_handler),
-
-], 'student', 'student'
+]
 
 _class_url = [
     re_path(r'([0-9a-zA-Z]*)', class_handler)
-], 'class', 'class'
+]
 
 # application urls
 student_patterns = [
-    path('student/', _student_url),
-    path('class/', _class_url),
+    path('student/', make_path_view(_student_url, 'student')),
+    path('class/', make_path_view(_class_url, 'class')),
 ]

@@ -106,3 +106,15 @@ def page_not_found(request, e):
     if e:
         print("404 异常：", e)
     return render(request, 'error/404.html')
+
+
+def make_path_view(urlconf, app_name, namespace=None):
+    """
+    构建 from django.urls import path 函数中的 view 变量
+    .
+    :param urlconf: re_path 列表 [re_path('index', student_index), re_path(r'([0-9a-zA-Z]*)', student_handler),]
+    :param app_name: 应用名称
+    :param namespace: 应用所在模块
+    :return: tuple
+    """
+    return urlconf, app_name, namespace or app_name
