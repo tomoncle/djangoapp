@@ -8,7 +8,7 @@
 from django.urls import path
 from django.urls import re_path
 
-from .views import StudentRestResponse, ClassRestResponse, student_index
+from .views import StudentRestResponse, ClassRestResponse, student_index, students_list, student_save
 from ..common import build_request_params
 from ..common import check_request_method
 from ..common import make_path_view
@@ -31,6 +31,8 @@ def class_handler(_request, *args, **kwargs):
 
 _student_url = [
     re_path('index', student_index),
+    re_path('list', students_list),
+    re_path('save', student_save),
     re_path(r'([0-9a-zA-Z]*)', student_handler),
 ]
 

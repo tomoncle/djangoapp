@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 # Create your models here.
 
-from datetime import datetime
-
 from django.db import models
 
 from ..common import T
@@ -11,9 +9,9 @@ from ..common import T
 
 class Clazz(models.Model, T):
     clazz_id = models.AutoField(primary_key=True)
-    name = models.CharField('名称',max_length=50, null=False)
-    description = models.CharField('描述',max_length=200, default='.')
-    create_time = models.DateTimeField('创建时间',auto_now_add=True)
+    name = models.CharField('名称', max_length=50, null=False)
+    description = models.CharField('描述', max_length=200, default='.')
+    create_time = models.DateTimeField('创建时间', auto_now_add=True)
 
     class Meta:
         db_table = 'clazz'
@@ -27,7 +25,6 @@ class Clazz(models.Model, T):
 
 
 class Student(models.Model, T):
-
     class Gender(models.IntegerChoices):
         """
         性别枚举
@@ -51,10 +48,3 @@ class Student(models.Model, T):
 
     def __str__(self):
         return self.__unicode__()
-
-    def to_dict(self):
-        d = super(Student, self).to_dict()
-        for k, v in d.items():
-            if isinstance(v, datetime):
-                d[k] = '{v}'.format(v=v)
-        return d

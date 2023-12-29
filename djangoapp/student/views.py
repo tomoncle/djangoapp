@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Student,Clazz
+from .models import Student, Clazz
 from ..common import dict_filters
 from ..common import ignore_self_waning
 
@@ -47,10 +48,24 @@ class StudentRestResponse(object):
         :return:
         """
         get_id = get_id or _request.GET.get('student_id')
+        # 有ID就是查详情
         if get_id:
             data = Student.objects.filter(student_id=get_id)
             return data[0].to_dict() if data else None
-        return [s.to_dict() for s in Student.objects.all()]
+
+        # 分页查询
+        page = _request.GET.get('page', 1)  # 页码
+        size = _request.GET.get("size", 10)  # 条目
+        objects_list = Student.objects.all()
+        paginator = Paginator(objects_list, size)
+        page_obj = paginator.get_page(page)
+
+        data = {
+            'total': paginator.count,
+            'current_page': int(page),
+            'students': [s.to_dict() for s in page_obj.object_list]
+        }
+        return data
 
     @csrf_exempt
     def post(self, _request, *args):
@@ -101,7 +116,49 @@ class StudentRestResponse(object):
 
 
 def student_index(request):
+    """
+    函数式接口，页面测试
+    :param request:
+    :return:
+    """
     from django.shortcuts import render
     students = Student.objects.all()
     context = {'students': students}
     return render(request, 'students/index.html', context)
+
+
+@csrf_exempt
+def student_save(request):
+    """
+    函数式接口测试，直接返回Json
+    :param request:
+    :return:
+    """
+    from django.http import JsonResponse
+    name = request.POST.get("name")
+    stu = Student(name=name)
+    stu.save()
+    return JsonResponse({'data': stu.to_dict(), 'path': request.path, 'method': request.method})
+
+
+def students_list(request):
+    """
+    函数式接口测试，直接返回Json
+    :param request:
+    :return:
+    """
+    from django.http import JsonResponse
+    from django.core.paginator import Paginator
+
+    page = request.GET.get('page', 1)
+    size = request.GET.get("size", 10)
+    objects_list = Student.objects.all()
+    paginator = Paginator(objects_list, size)
+    page_obj = paginator.get_page(page)
+
+    data = {
+        'total': paginator.count,
+        'current_page': int(page),
+        'students': [s.to_dict() for s in page_obj.object_list]
+    }
+    return JsonResponse({'data': data, 'path': request.path, 'method': request.method})
