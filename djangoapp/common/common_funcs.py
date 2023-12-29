@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @Author         : Tom.Lee
-
 import json
+import time
 from datetime import datetime
 
 
@@ -75,3 +75,9 @@ def ignore_self_waning(func):
         return func(*args, **kwargs)
 
     return wrapper
+
+
+def now_date():
+    t = str(time.time()).split(".")
+    time_tuple = time.localtime(int(t[0]))
+    return time.strftime('%Y-%m-%d %H:%M:%S', time_tuple)

@@ -24,7 +24,20 @@ class ClassRestResponse(object):
         if get_id:
             data = Clazz.objects.filter(clazz_id=get_id)
             return data[0].to_dict() if data else None
-        return [s.to_dict() for s in Student.objects.all()]
+
+        # 分页查询
+        page = _request.GET.get('page', 1)  # 页码
+        size = _request.GET.get("size", 10)  # 条目
+        objects_list = Clazz.objects.all()
+        paginator = Paginator(objects_list, size)
+        page_obj = paginator.get_page(page)
+
+        data = {
+            'total': paginator.count,
+            'current_page': int(page),
+            'students': [s.to_dict() for s in page_obj.object_list]
+        }
+        return data
 
     @csrf_exempt
     def post(self, _request, *args):
