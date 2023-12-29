@@ -7,6 +7,7 @@
 # @Product        : PyCharm
 
 import time
+import urllib.parse
 
 from django.http import HttpResponse
 from django.http import HttpResponseNotAllowed
@@ -104,3 +105,9 @@ def make_response(_object):
         return wrapper
 
     return decorator
+
+
+def url_decode(encoded_url):
+    # unquote主要用于处理由quote编码后的URL,还原其中的特殊字符,常见应用包括解析GET请求参数中的编码内容等。
+    # 它可以解码大部分常见的URL编码。
+    return urllib.parse.unquote(encoded_url)
