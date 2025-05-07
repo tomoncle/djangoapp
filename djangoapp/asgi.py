@@ -30,6 +30,17 @@ ASGI_APPLICATION = "djangoapp.asgi.application"
 
 import os
 
+import django
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djangoapp.settings')
+django.setup()
+# 注意：django.setup()要置顶，不能在底部，否则使用 daphne djangoapp.asgi:application 启动会出现下面的错误:
+#
+# django.core.exceptions.ImproperlyConfigured: Requested setting DEFAULT_CHARSET, but settings are not configured.
+# You must either define the environment variable DJANGO_SETTINGS_MODULE or
+# call settings.configure() before accessing settings.
+
+
 from django.core.asgi import get_asgi_application
 
 from channels.auth import AuthMiddlewareStack
@@ -37,7 +48,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 
 from djangoapp.webssh.urls import websocket_patterns
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djangoapp.settings')
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djangoapp.settings')
 
 # application = get_asgi_application()
 
