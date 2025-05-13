@@ -61,3 +61,14 @@ ASGI_APPLICATION = "myproject.asgi.application"
 ```bash
 python manager runserver
 ```
+
+### 4.多进程部署
+
+```bash
+# with http
+$ pip install uvicorn gunicorn
+# with http and websocket
+$ pip install uvicorn[standard] gunicorn
+# 启动程序
+$ gunicorn -w 4 -k uvicorn.workers.UvicornWorker djangoapp.asgi:application
+```
