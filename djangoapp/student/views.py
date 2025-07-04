@@ -175,3 +175,32 @@ def students_list(request):
         'students': [s.to_dict() for s in page_obj.object_list]
     }
     return JsonResponse({'data': data, 'path': request.path, 'method': request.method})
+
+
+class StudentAnyResponse(object):
+    @ignore_self_waning
+    def query(self, _request, get_id=None):
+        """
+        http://localhost:8000/student/1?username=tom
+        http://localhost:8000/student/?username=tom
+        :return:
+        """
+        get_id = get_id or _request.GET.get('student_id')
+        # 有ID就是查详情
+        if get_id:
+            data = Student.objects.filter(student_id=get_id)
+            return data[0].to_dict() if data else None
+
+        # 分页查询
+        page = _request.GET.get('page', 1)  # 页码
+        size = _request.GET.get("size", 10)  # 条目
+        objects_list = Student.objects.all()
+        paginator = Paginator(objects_list, size)
+        page_obj = paginator.get_page(page)
+
+        data = {
+            'total': paginator.count,
+            'current_page': int(page),
+            'students': [s.to_dict() for s in page_obj.object_list]
+        }
+        return data

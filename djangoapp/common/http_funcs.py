@@ -18,7 +18,8 @@ __all__ = [
     'check_request_method',
     'build_request_params',
     'json_response',
-    'make_response'
+    'make_response',
+    'make_path_response'
 ]
 
 _HTTP_405 = HttpResponse(405)
@@ -100,7 +101,47 @@ def make_response(_object):
                 'path': request.path,
                 'method': request.method,
                 'message': '{msg}'.format(msg=message or 'unknown')
-            })
+            }, json_dumps_params=dict(indent=2, ensure_ascii=False))
+
+        return wrapper
+
+    return decorator
+
+
+def remove_prefix(path: str, prefix: str) -> str:
+    if path.startswith(prefix):
+        # 去掉前缀
+        result = path[len(prefix):]
+        result = result.lstrip('/').rstrip("/")
+        return result.replace('/', '_')
+    else:
+        return path.lstrip('/').rstrip("/").replace('/', '_')
+
+
+def make_rest_response(_object, prefix):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            request = args[0]
+            message = 'success'
+            data = None
+            try:
+                method = remove_prefix(request.path, prefix)
+                call_func = getattr(_object(), '%s' % method.lower())
+                data = call_func(*args, **kwargs)
+                # if data and isinstance(data, dict):
+                #     return JsonResponse(data)
+                # return HttpResponse(data)
+            except Exception as e:
+                message = e
+
+            return JsonResponse({
+                'status': message == 'success',
+                'timestamp': int(round(time.time() * 1000)),
+                'data': data,
+                'path': request.path,
+                'method': request.method,
+                'message': '{msg}'.format(msg=message or 'unknown')
+            }, json_dumps_params=dict(indent=2, ensure_ascii=False))
 
         return wrapper
 
