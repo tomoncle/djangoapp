@@ -63,7 +63,7 @@ class T(object):
         return {k: T.getvalue(self, k) for k in dic.keys()}
 
     def to_json(self):
-        return json.dumps(self.to_dict(), indent=2)
+        return json.dumps(self.to_dict(), indent=2, ensure_ascii=False)
 
 
 def dict_filters(dic, keys):

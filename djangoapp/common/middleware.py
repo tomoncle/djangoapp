@@ -36,8 +36,12 @@ class HttpMiddleware(MiddlewareMixin):
     @ignore_self_waning
     def process_request(self, request):
         """处理每个请求"""
+        content_type = request.headers.get('Content-Type') or ""
+        request_data = 'ignore {} data.'.format(content_type)
+        if 'application/json' in content_type or 'text/html' in content_type:
+            request_data = request.body.decode("utf-8")
         content = """\033[34m
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  process_request start >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> process_request start >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Method    : {}
 Header    : {}
 Path      : {}
@@ -45,14 +49,14 @@ GET       : {}
 Form      : {}
 Body      : {}
 Meta      : {}
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  process_request end   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -process_request end- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 \033[0m""".format(
             request.method,
             request.headers,
             request.path,
             request.GET,
             request.POST,
-            request.body.decode("utf-8"),
+            request_data,
             request.META)
         print(content)
 
@@ -64,13 +68,17 @@ Meta      : {}
     @ignore_self_waning
     def process_response(self, request, response):
         """处理每个响应"""
-        content = """\033[35m
+        content_type = response.headers.get('Content-Type')
+        response_data = 'ignore {} data.'.format(content_type)
+        if 'application/json' in content_type or 'text/html' in content_type:
+            response_data = response.content.decode("utf-8")
+        content = """\033[36m
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< process_response start <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 Method    : {}
 Path      : {}
 Response  : {}
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  process_response end  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-\033[0m""".format(request.method, request.path, response.content.decode('utf-8'))
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< -process_response end- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+\033[0m""".format(request.method, request.path, response_data)
         print(content)
         return response
 

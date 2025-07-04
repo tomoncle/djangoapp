@@ -8,12 +8,23 @@
 
 from django.urls import re_path, path
 
-from . import download, download_large, download_proxy, upload
+from . import (
+    download,
+    download_large,
+    download_proxy,
+    upload,
+    download_excel,
+    download_excel_custom,
+    upload_excel
+)
 
 _urlpatterns = [
+    re_path(r'download/excel/', download_excel),  # Excel下载接口 - 示例数据
+    re_path(r'download/excel/custom/', download_excel_custom),  # Excel下载接口 - 自定义数据
     re_path(r'download/', download),
     re_path(r'download_large/', download_large),
     re_path(r'download_proxy/', download_proxy),
+    re_path(r'upload/excel/', upload_excel),  # 上传Excel接口
     re_path(r'upload/', upload),
 ]
 
