@@ -20,9 +20,9 @@ class ClassRestResponse(object):
         http://localhost:8000/class/?name=manth
         :return:
         """
-        get_id = get_id or _request.GET.get('class_id')
-        if get_id:
-            data = Clazz.objects.filter(clazz_id=get_id)
+        class_id = get_id or _request.GET.get('class_id')
+        if class_id:
+            data = Clazz.objects.filter(clazz_id=class_id)
             return data[0].to_dict() if data else None
 
         # 分页查询
@@ -60,10 +60,10 @@ class StudentRestResponse(object):
         http://localhost:8000/student/?username=tom
         :return:
         """
-        get_id = get_id or _request.GET.get('student_id')
+        student_id = get_id or _request.GET.get('student_id')
         # 有ID就是查详情
-        if get_id:
-            data = Student.objects.filter(student_id=get_id)
+        if student_id:
+            data = Student.objects.filter(student_id=student_id)
             return data[0].to_dict() if data else None
 
         # 分页查询
@@ -179,16 +179,15 @@ def students_list(request):
 
 class StudentAnyResponse(object):
     @ignore_self_waning
-    def query(self, _request, get_id=None):
+    def query(self, _request):
         """
-        http://localhost:8000/student/1?username=tom
-        http://localhost:8000/student/?username=tom
+        http://localhost:8000/student/any/query
         :return:
         """
-        get_id = get_id or _request.GET.get('student_id')
+        student_id = _request.GET.get('student_id')
         # 有ID就是查详情
-        if get_id:
-            data = Student.objects.filter(student_id=get_id)
+        if student_id:
+            data = Student.objects.filter(student_id=student_id)
             return data[0].to_dict() if data else None
 
         # 分页查询

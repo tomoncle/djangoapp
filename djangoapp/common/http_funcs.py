@@ -19,7 +19,7 @@ __all__ = [
     'build_request_params',
     'json_response',
     'make_response',
-    'make_path_response'
+    'make_rest_response'
 ]
 
 _HTTP_405 = HttpResponse(405)
@@ -90,6 +90,8 @@ def make_response(_object):
                 # if data and isinstance(data, dict):
                 #     return JsonResponse(data)
                 # return HttpResponse(data)
+            except AttributeError:
+                message = "Method '{method}' not supported".format(method=request.path)
             except Exception as e:
                 message = e
 
@@ -118,19 +120,22 @@ def remove_prefix(path: str, prefix: str) -> str:
         return path.lstrip('/').rstrip("/").replace('/', '_')
 
 
-def make_rest_response(_object, prefix):
+def make_rest_response(_object, prefix=''):
+
     def decorator(func):
-        def wrapper(*args, **kwargs):
-            request = args[0]
+
+        def wrapper(request, path, *args, **kwargs):
             message = 'success'
             data = None
             try:
-                method = remove_prefix(request.path, prefix)
+                method = path.lstrip('/').rstrip("/").replace('/', '_')
                 call_func = getattr(_object(), '%s' % method.lower())
-                data = call_func(*args, **kwargs)
+                data = call_func(request, *args, **kwargs)
                 # if data and isinstance(data, dict):
                 #     return JsonResponse(data)
                 # return HttpResponse(data)
+            except AttributeError:
+                message = "Method '{method}' not supported".format(method=request.path)
             except Exception as e:
                 message = e
 

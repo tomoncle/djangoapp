@@ -78,7 +78,10 @@ Method    : {}
 Path      : {}
 Response  : {}
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< -process_response end- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-\033[0m""".format(request.method, request.path, response_data)
+\033[0m""".format(
+            request.method,
+            request.path,
+            response_data)
         print(content)
         return response
 

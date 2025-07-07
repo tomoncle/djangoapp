@@ -8,17 +8,26 @@
 from django.urls import path
 from django.urls import re_path
 
-from .views import StudentRestResponse, ClassRestResponse, student_index, students_list, student_save
+from .views import StudentRestResponse, ClassRestResponse, student_index, students_list, student_save, \
+    StudentAnyResponse
 from ..common import build_request_params
 from ..common import check_request_method
 from ..common import make_path_view
 from ..common import make_response
+from ..common import make_rest_response
 
 
 @check_request_method(["GET", "POST", "PUT", "DELETE", "HEAD", "PATCH"])
 @build_request_params
 @make_response(StudentRestResponse)
 def student_handler(_request, *args, **kwargs):
+    pass
+
+
+@check_request_method(["GET", "POST", "PUT", "DELETE", "HEAD", "PATCH"])
+@build_request_params
+@make_rest_response(StudentAnyResponse, 'aabbcc/')
+def student_any_handler(_request, *args, **kwargs):
     pass
 
 
@@ -33,10 +42,12 @@ _student_url = [
     re_path('index', student_index),
     re_path('list', students_list),
     re_path('save', student_save),
+    re_path(r'any/([0-9a-zA-Z/]+)', student_any_handler),
     re_path(r'([0-9a-zA-Z]*)', student_handler),
 ]
 
 _class_url = [
+    # re_path(r'rest/(.*)', class_handler),
     re_path(r'([0-9a-zA-Z]*)', class_handler)
 ]
 
