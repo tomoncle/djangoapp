@@ -18,13 +18,15 @@ from django.contrib import admin
 from django.urls import path
 
 from .common import page_not_found
+from .common import register_routes
 from .filestream.urls import file_patterns
 from .student.urls import student_patterns
 from .webssh.urls import webssh_patterns
+
 # default url
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+              ] + register_routes()
 
 # application urls
 urlpatterns += student_patterns

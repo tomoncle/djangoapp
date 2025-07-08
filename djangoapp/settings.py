@@ -55,6 +55,14 @@ PROJECT_APPS = [
 # 模块集成
 INSTALLED_APPS.extend(PROJECT_APPS)
 
+# 配置 discover_routes 自动发现选项（可选）
+# 指定要扫描的自定义模块
+# ROUTE_AUTODISCOVER_MODULES = [
+#     'myapp.controllers',
+#     'api.views',
+#     'custom.routes',
+# ]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -150,3 +158,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # @login_required
 LOGIN_URL = '/admin/login'
+
+# loguru Logger Level
+os.environ['LOGURU_LEVEL'] = 'TRACE'

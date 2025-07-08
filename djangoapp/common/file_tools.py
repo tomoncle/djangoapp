@@ -9,11 +9,15 @@ from functools import reduce
 
 import six
 
-__all__ = ['IterableWithLength',
-           'open_file_to_iterable',
-           'get_file_bytes',
-           'file_iterator',
-           'get_file_size']
+__all__ = [
+    'IterableWithLength',
+    'open_file_to_iterable',
+    'get_file_bytes',
+    'file_iterator',
+    'get_file_size',
+    'copy_file',
+    'rename_file'
+]
 
 
 class IterableWithLength(object):

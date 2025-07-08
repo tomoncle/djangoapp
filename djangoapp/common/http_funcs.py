@@ -73,12 +73,13 @@ def json_response(func):
     def wrapper(*args, **kwargs):
         res = func(*args, **kwargs)
         assert isinstance(res, (dict, list))
-        return JsonResponse(res)
+        return JsonResponse(res, safe=False, json_dumps_params=dict(indent=2, ensure_ascii=False))
 
     return wrapper
 
 
 def make_response(_object):
+    """根据请求方法来自动路由"""
     def decorator(func):
         def wrapper(*args, **kwargs):
             request = args[0]
@@ -103,7 +104,7 @@ def make_response(_object):
                 'path': request.path,
                 'method': request.method,
                 'message': '{msg}'.format(msg=message or 'unknown')
-            }, json_dumps_params=dict(indent=2, ensure_ascii=False))
+            }, safe=False, json_dumps_params=dict(indent=2, ensure_ascii=False))
 
         return wrapper
 
@@ -121,7 +122,7 @@ def remove_prefix(path: str, prefix: str) -> str:
 
 
 def make_rest_response(_object, prefix=''):
-
+    """根据请求路径来自动路由"""
     def decorator(func):
 
         def wrapper(request, path, *args, **kwargs):
@@ -146,7 +147,7 @@ def make_rest_response(_object, prefix=''):
                 'path': request.path,
                 'method': request.method,
                 'message': '{msg}'.format(msg=message or 'unknown')
-            }, json_dumps_params=dict(indent=2, ensure_ascii=False))
+            }, safe=False, json_dumps_params=dict(indent=2, ensure_ascii=False))
 
         return wrapper
 

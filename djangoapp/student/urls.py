@@ -8,8 +8,14 @@
 from django.urls import path
 from django.urls import re_path
 
-from .views import StudentRestResponse, ClassRestResponse, student_index, students_list, student_save, \
+from .views import (
+    StudentRestResponse,
+    ClassRestResponse,
+    student_index,
+    students_list,
+    student_save,
     StudentAnyResponse
+)
 from ..common import build_request_params
 from ..common import check_request_method
 from ..common import make_path_view
